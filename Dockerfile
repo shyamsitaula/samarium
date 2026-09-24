@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libzip-dev \
+    netcat-openbsd \
     nodejs \
     npm
 
