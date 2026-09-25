@@ -6,7 +6,7 @@ set -e
 # so fail fast with a clear message if .env doesn't provide one.
 missing=""
 for key in ADMIN_NAME ADMIN_EMAIL ADMIN_PASSWORD; do
-  if ! grep -qE "^${key}=.+" .env 2>/dev/null; then
+  if ! grep -qE "^${key}=[^[:space:]]" .env 2>/dev/null; then
     missing="$missing $key"
   fi
 done
@@ -26,7 +26,7 @@ composer install --no-interaction
 npm install
 
 # Only generate a key if .env doesn't have one; regenerating logs everyone out
-grep -qE '^APP_KEY=.+' .env || php artisan key:generate
+grep -qE '^APP_KEY=[^[:space:]]' .env || php artisan key:generate
 php artisan migrate --force
 
 # Seed only on first-time setup; re-seeding would duplicate the admin user and other data
