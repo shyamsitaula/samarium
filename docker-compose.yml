@@ -1,12 +1,10 @@
-version: '3'
-
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: samarium_app
-    restart: unless-stopped
+    restart: on-failure:3
     ports:
       - "8000:80"
     environment:

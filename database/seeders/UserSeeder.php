@@ -19,10 +19,13 @@ class UserSeeder extends Seeder
     {
         echo "\n CREATE FIRST ADMIN USER: Please provide below details.\n";
 
-        /* Ask for name, email and password from terminal. */
-        $name = text('Name:', required: true);
-        $email = text('Email:', required: true);
-        $password = text('Password:', required: true);
+        /*
+         * Ask for name, email and password from terminal.
+         * Defaults come from .env so seeding works non-interactively (e.g. in Docker).
+         */
+        $name = text('Name:', default: env('ADMIN_NAME', ''), required: true);
+        $email = text('Email:', default: env('ADMIN_EMAIL', ''), required: true);
+        $password = text('Password:', default: env('ADMIN_PASSWORD', ''), required: true);
         $password =  Hash::make($password);
 
         User::factory()->create(compact('name', 'email', 'password'));
