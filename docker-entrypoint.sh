@@ -25,7 +25,8 @@ echo "Database is up."
 composer install --no-interaction
 npm install
 
-php artisan key:generate
+# Only generate a key if .env doesn't have one; regenerating logs everyone out
+grep -qE '^APP_KEY=.+' .env || php artisan key:generate
 php artisan migrate --force
 
 # Seed only on first-time setup; re-seeding would duplicate the admin user and other data
