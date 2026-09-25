@@ -70,15 +70,17 @@ This might be helpful for:
 git clone https://github.com/oitcode/samarium.git
 cd samarium
 cp .env.docker.example .env
-docker-compose up --build -d
 
-# First-time setup only
-docker exec -it samarium_app npm run dev
-docker exec -it samarium_app composer dump-autoload
-docker exec -it samarium_app php artisan migrate
-docker exec -it samarium_app php artisan key:generate
-docker exec -it samarium_app php artisan storage:link
-docker exec -it samarium_app php artisan db:seed
+# Edit .env and set the first admin user's login details:
+# ADMIN_NAME=Your Name
+# ADMIN_EMAIL=you@example.com
+# ADMIN_PASSWORD=your_password
+
+docker compose up --build -d
+
+# First-time setup (key, migrations, seeding, assets) runs automatically.
+# The first start takes a few minutes; follow progress with:
+docker logs -f samarium_app
 
 # Visit: http://127.0.0.1:8000 (website)
 # Dashboard: http://127.0.0.1:8000/dashboard
