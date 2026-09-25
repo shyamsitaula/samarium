@@ -31,4 +31,7 @@ php artisan db:seed --force
 php artisan storage:link
 composer dump-autoload
 
-exec npm run dev
+npm run dev
+
+# Start Apache as the main process so the container stays up and serves the app
+exec apache2-foreground
