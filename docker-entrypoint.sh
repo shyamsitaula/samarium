@@ -43,5 +43,5 @@ composer dump-autoload
 
 npm run dev
 
-# Start Apache as the main process so the container stays up and serves the app
-exec apache2-foreground
+# Hand off to the container's command (CMD in the Dockerfile, apache2-foreground by default)
+exec "$@"

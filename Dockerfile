@@ -50,11 +50,12 @@ COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 # Expose port for php artisan serve
 EXPOSE 8000:80
 
-# Start Apache
-CMD ["apache2-foreground"]
-
 # Copy entrypoint to image
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 # Make sure it is executable
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Run first-time setup, then hand off to CMD (Apache)
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["apache2-foreground"]
