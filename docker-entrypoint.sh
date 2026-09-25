@@ -27,8 +27,17 @@ npm install
 
 php artisan key:generate
 php artisan migrate --force
-php artisan db:seed --force
-php artisan storage:link
+
+# Seed only on first-time setup; re-seeding would duplicate the admin user and other data
+user_count=$(php artisan tinker --execute="echo \Illuminate\Support\Facades\DB::table('users')->count();")
+if [ "$user_count" = "0" ]; then
+  php artisan db:seed --force
+else
+  echo "Database already seeded, skipping db:seed."
+fi
+
+# Only create the storage symlink if it doesn't already exist
+[ -L public/storage ] || php artisan storage:link
 composer dump-autoload
 
 npm run dev
