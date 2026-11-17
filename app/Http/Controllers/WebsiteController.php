@@ -12,6 +12,8 @@ use App\Models\SeatTable\SeatTable;
 use App\Models\Team\TeamMember;
 use App\Models\Vacancy\Vacancy;
 use App\Models\DocumentFile\DocumentFile;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class WebsiteController extends Controller
 {
@@ -221,6 +223,21 @@ class WebsiteController extends Controller
     public function pdfDisplayFile($documentFileId)
     {
         $documentFile = DocumentFile::find($documentFileId);
+
+        if ($documentFile === null) {
+            abort(404);
+        }
+
+        /*
+         * Document files assigned to one or more user groups are restricted.
+         * Only an authenticated user passing the view-document-file gate may
+         * access them. Files with no user group stay publicly viewable.
+         */
+        if (! $documentFile->userGroups->isEmpty()) {
+            if (! Auth::check() || Gate::denies('view-document-file', $documentFile)) {
+                abort(403);
+            }
+        }
 
         return response()->file('storage/' . $documentFile->file_path);
     }
